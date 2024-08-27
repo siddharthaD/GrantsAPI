@@ -1,6 +1,6 @@
 from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -20,8 +20,11 @@ async def get_grant_details(grant_id: int, db: Annotated[Session, Depends(get_se
 
 
 @grants.post("/{grant_id}/apply")
-async def create_grant_application(grant_id: int, application: ApplicationBase,
-                                   # files: List[UploadFile],
+async def create_grant_application(grant_id: int,
+                                   title:Annotated[str, Form()],
+                                   description: Annotated[str, Form()],
+                                   application: ApplicationBase,
+                                   files: List[UploadFile],
                                    db: Annotated[Session, Depends(get_session)],
                                    current_user: Annotated[User, Depends(get_current_user)]):
     grant_details = GrantRepository.get_grant_by_id(db=db, grant_id=grant_id)
@@ -48,10 +51,10 @@ async def create_grant_application(grant_id: int, application: ApplicationBase,
 
     application_id = -1
     try:
-        appl_data = application.__dict__
-        appl_data.update({'grant_id': grant_id})
-        appl_data.update({'applicant_id': application_id})
-        appl_create_det = ApplicationCreate(**appl_data)
+        appl_create_det = ApplicationCreate(grant_id=grant_id,
+                                            applicant_id=current_user.id,
+                                            title=title,
+                                            description=description)
 
         application_id = ApplicationRepository.create_application(db, appl_create_det)
         for file in files:
