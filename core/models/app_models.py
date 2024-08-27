@@ -2,15 +2,17 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from database.models import GrantStatus,ApplicationStatus
+from database.models import GrantStatus, ApplicationStatus
+
 
 class Token(BaseModel):
     access_token: str
-    token_type: str
+    token_type: str = "Bearer"
 
 
 class TokenData(BaseModel):
-    username: str | None = None
+    email: str
+    full_name: str | None = None
     id: int
 
 

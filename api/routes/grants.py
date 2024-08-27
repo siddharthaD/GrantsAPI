@@ -14,14 +14,14 @@ from database.db import get_session
 grants = APIRouter(tags=["Grants"])
 
 
-@grants.get("/grants/{grant_id}")
+@grants.get("/{grant_id}")
 async def get_grant_details(grant_id: int, db: Annotated[Session, Depends(get_session)]):
     return GrantRepository.get_grant_by_id(db, grant_id)
 
 
-@grants.post("/grants/{grant_id}/apply")
+@grants.post("/{grant_id}/apply")
 async def create_grant_application(grant_id: int, application: ApplicationBase,
-                                   files: List[UploadFile],
+                                   # files: List[UploadFile],
                                    db: Annotated[Session, Depends(get_session)],
                                    current_user: Annotated[User, Depends(get_current_user)]):
     grant_details = GrantRepository.get_grant_by_id(db=db, grant_id=grant_id)
@@ -48,9 +48,10 @@ async def create_grant_application(grant_id: int, application: ApplicationBase,
 
     application_id = -1
     try:
-        appl_create_det = ApplicationCreate(**application.__dict__)
-        appl_create_det.grant_id = grant_id
-        appl_create_det.applicant_id = current_user.id
+        appl_data = application.__dict__
+        appl_data.update({'grant_id': grant_id})
+        appl_data.update({'applicant_id': application_id})
+        appl_create_det = ApplicationCreate(**appl_data)
 
         application_id = ApplicationRepository.create_application(db, appl_create_det)
         for file in files:

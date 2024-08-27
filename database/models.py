@@ -87,7 +87,7 @@ class Applications(Base):
     grant_id: Mapped[int] = mapped_column(ForeignKey('grants.id'))
     status: Mapped[str] = mapped_column(Enum(ApplicationStatus))
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.datetime.utcnow())
-    changed_at: Mapped[DateTime | None] = mapped_column(DateTime)
+    changed_at: Mapped[DateTime | None] = mapped_column(DateTime, default=datetime.datetime.utcnow())
     changed_by: Mapped[int]
 
     applicant = relationship('User', foreign_keys=[applicant_id], back_populates='applications')

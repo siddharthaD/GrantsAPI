@@ -18,3 +18,4 @@ def get_session():
             session.commit()
         except Exception as e:
             session.rollback()
+            raise e
