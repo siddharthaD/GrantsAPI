@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "grantsapi"
+version = "0.1.0"
+description = ""
+authors = ["Sid D <siddhuiiti@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.112.2"
+uvicorn = "^0.30.6"
+pytest = "^8.3.2"
+alembic = "^1.13.2"
+pydantic-settings = "^2.4.0"
+psycopg-binary = "^3.2.1"
+psycopg-pool = "^3.2.2"
+psycopg = "^3.2.1"
+python-multipart = "^0.0.9"
+pyjwt = "^2.9.0"
+passlib = "^1.7.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
